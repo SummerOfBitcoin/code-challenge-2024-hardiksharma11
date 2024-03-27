@@ -95,10 +95,10 @@ def calculate_block_hash(header):
 def serialize_block_header(block):
     serialized_block_header = (
         struct.pack("<I", block["version"])
-        + bytes.fromhex(block["previous_block_hash"])
-        + bytes.fromhex(block["merkle_root"])
+        + bytes.fromhex(block["previous_block_hash"])[::-1]
+        + bytes.fromhex(block["merkle_root"])[::-1]
         + struct.pack("<I", block["timestamp"])
-        + bytes.fromhex(block["difficulty_target"])
+        + bytes.fromhex(block["difficulty_target"])[::-1]
         + struct.pack("<I", block["nonce"])
     )
     return serialized_block_header.hex()
@@ -114,11 +114,11 @@ def mine_block(merkle_root):
         "difficulty_target": BITS,
         "nonce": 0,
     }
-    block_header = serialize_block_header(block)
-    print("Block header: ", block_header)
     print("Mining block...")
     while True:
-        block_hash = calculate_block_hash(block_header)
+        block_header = serialize_block_header(block)
+        print("Header: ", block_header)
+        block_hash = double_hash_256(block_header)
         if block_hash < DIFFICULTY_TARGET:
             print("Block mined successfully!")
             print("Block hash: ", block_hash)
