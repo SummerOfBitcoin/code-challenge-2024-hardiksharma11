@@ -7,10 +7,25 @@ import ecdsa
 
 # Constants
 DIFFICULTY_TARGET = "0000ffff00000000000000000000000000000000000000000000000000000000"
+BITS = "1f00ffff"
 
 # Sample public key and signature for testing
 SAMPLE_PUBLIC_KEY = "04b5f2b6f01b02635bf0287685a03b089f8f82e583e49f0a4714f1ef29f336ef3fcedfacd9866fcb6b20389fc48623b41c8fb14a76b2c2c10cb58b300c72c4f28"  # Example public key
 SAMPLE_SIGNATURE = "3045022100e1d42fb417a3b991db2a33e72044c4f2d171dc0144075c2d08931c8b1b230c7022068f7c2c7c38cb1c4ac01e8f92a855059dfb28ef3d3e01a88342281e0708580b"  # Example signature
+
+
+def reverse_hex_bytes(hex_string):
+
+    # Convert the hexadecimal string to a byte array.
+    byte_array = bytearray.fromhex(hex_string)
+
+    # Reverse the byte array.
+    byte_array.reverse()
+
+    # Convert the reversed byte array back to a hexadecimal string.
+    reversed_hex_string = byte_array.hex()
+
+    return reversed_hex_string
 
 
 # Function to verify signature
@@ -50,6 +65,8 @@ def calculate_merkle_root(transactions):
     # todo
     # Implement your merkle root calculation logic here
     result = hashlib.sha256(transactions[0].encode()).hexdigest()
+    result = hashlib.sha256(result.encode()).hexdigest()
+    # result = reverse_hex_bytes(result)
     print("Merkle root: ", result)
     return result
 
@@ -62,12 +79,12 @@ def calculate_block_hash(header):
 
 def serialize_block_header(block):
     serialized_block_header = (
-        struct.pack("<I", block["version"]) +  # Version (int32_t)
-        bytes.fromhex(block["previous_block_hash"])[::-1] +  # Previous block hash (char[32])
-        bytes.fromhex(block["merkle_root"])[::-1] +  # Merkle root hash (char[32])
-        struct.pack("<I", block["timestamp"]) +  # Timestamp (uint32_t)
-        bytes.fromhex(block["difficulty_target"])[::-1] +  # Difficulty target (uint32_t)
-        struct.pack("<I", block["nonce"])  # Nonce (uint32_t)
+        struct.pack("<I", block["version"])
+        + bytes.fromhex(block["previous_block_hash"])[::-1]
+        + bytes.fromhex(block["merkle_root"])[::-1]
+        + struct.pack("<I", block["timestamp"])
+        + bytes.fromhex(block["difficulty_target"])[::-1]
+        + struct.pack("<I", block["nonce"])
     )
     return serialized_block_header.hex()
 
@@ -79,7 +96,7 @@ def mine_block(merkle_root):
         "previous_block_hash": "0000000000000000000000000000000000000000000000000000000000000000",
         "merkle_root": merkle_root,
         "timestamp": int(time.time()),
-        "difficulty_target": DIFFICULTY_TARGET,
+        "difficulty_target": BITS,
         "nonce": 0,
     }
     block_header = serialize_block_header(block)
@@ -138,13 +155,15 @@ def main():
     }
 
     raw_coinbase_transaction = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0804233fa04e028b12ffffffff0130490b2a010000004341047eda6bd04fb27cab6e7c28c99b94977f073e912f25d1ff7165d9c95cd9bbe6da7e7ad7f2acb09e0ced91705f7616af53bee51a238b7dc527f2be0aa60469d140ac00000000"
-
+    coinbase_transaction_id = hashlib.sha256(
+        raw_coinbase_transaction.encode()
+    ).hexdigest()
     # Add coinbase transaction to valid transactions
-    transactions.insert(0, coinbase_transaction)
+    transactions.insert(0, coinbase_transaction_id)
 
     # Calculate merkle root
     print("Calculating merkle root...")
-    merkle_root = raw_coinbase_transaction
+    merkle_root = coinbase_transaction_id
     # merkle_root = calculate_merkle_root(valid_transactions)
 
     # Mine the block
@@ -163,7 +182,7 @@ def main():
 
         # Write transaction IDs (txids) of the transactions mined in the block
         # Start with the coinbase transaction
-        output_file.write(raw_coinbase_transaction)
+        output_file.write(coinbase_transaction_id)
         output_file.write("\n")
 
         # Write txids of other transactions, if any
