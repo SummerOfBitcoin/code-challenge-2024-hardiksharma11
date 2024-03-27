@@ -125,9 +125,7 @@ def mine_block(merkle_root):
             print("Nonce: ", block["nonce"])
             return block
         block["nonce"] += 1
-        block_header = json.dumps(
-            block, separators=(",", ":"), sort_keys=True
-        )  # Update block header
+         # Update block header
 
 
 # Main function
