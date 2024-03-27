@@ -95,10 +95,10 @@ def calculate_block_hash(header):
 def serialize_block_header(block):
     serialized_block_header = (
         struct.pack("<I", block["version"])
-        + bytes.fromhex(block["previous_block_hash"])[::-1]
-        + bytes.fromhex(block["merkle_root"])[::-1]
+        + bytes.fromhex(block["previous_block_hash"])
+        + bytes.fromhex(block["merkle_root"])
         + struct.pack("<I", block["timestamp"])
-        + bytes.fromhex(block["difficulty_target"])[::-1]
+        + bytes.fromhex(block["difficulty_target"])
         + struct.pack("<I", block["nonce"])
     )
     return serialized_block_header.hex()
@@ -171,7 +171,7 @@ def main():
 
     raw_coinbase_transaction = "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0804233fa04e028b12ffffffff0130490b2a010000004341047eda6bd04fb27cab6e7c28c99b94977f073e912f25d1ff7165d9c95cd9bbe6da7e7ad7f2acb09e0ced91705f7616af53bee51a238b7dc527f2be0aa60469d140ac00000000"
     coinbase_transaction_id = double_hash_256(raw_coinbase_transaction)
-    coinbase_transaction_id = reverse_hex_bytes(coinbase_transaction_id)
+    # coinbase_transaction_id = reverse_hex_bytes(coinbase_transaction_id)
     # Add coinbase transaction to valid transactions
     transactions.insert(0, coinbase_transaction_id)
 
