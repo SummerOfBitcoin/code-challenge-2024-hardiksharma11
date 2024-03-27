@@ -3,7 +3,6 @@ import json
 import hashlib
 import time
 import os
-import ecdsa
 
 # Constants
 DIFFICULTY_TARGET = "0000ffff00000000000000000000000000000000000000000000000000000000"
