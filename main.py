@@ -195,7 +195,8 @@ def main():
 
         # Write transaction IDs (txids) of the transactions mined in the block
         # Start with the coinbase transaction
-        output_file.write(reverse_hex_bytes(coinbase_transaction_id))
+        output_file.write(coinbase_transaction_id)
+        # output_file.write(reverse_hex_bytes(coinbase_transaction_id))
         output_file.write("\n")
 
         # Write txids of other transactions, if any
