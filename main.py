@@ -107,7 +107,7 @@ def serialize_block_header(block):
 # Function to mine the block
 def mine_block(merkle_root):
     block = {
-        "version": 3,
+        "version": 2,
         "previous_block_hash": "0000000000000000000000000000000000000000000000000000000000000000",
         "merkle_root": merkle_root,
         "timestamp": int(time.time()),
