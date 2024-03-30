@@ -94,7 +94,7 @@ def calculate_block_hash(header):
 
 def serialize_block_header(block):
     serialized_block_header = (
-        struct.pack("<I", block["version"])
+        bytes.fromhex(block["version"])
         + bytes.fromhex(block["previous_block_hash"])[::-1]
         + bytes.fromhex(block["merkle_root"])[::-1]
         + struct.pack("<I", block["timestamp"])
@@ -107,7 +107,7 @@ def serialize_block_header(block):
 # Function to mine the block
 def mine_block(merkle_root):
     block = {
-        "version": 2,
+        "version": "00000020",
         "previous_block_hash": "0000000000000000000000000000000000000000000000000000000000000000",
         "merkle_root": merkle_root,
         "timestamp": int(time.time()),
