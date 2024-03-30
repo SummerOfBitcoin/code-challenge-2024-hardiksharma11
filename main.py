@@ -119,7 +119,7 @@ def mine_block(merkle_root):
         block_header = serialize_block_header(block)
         block_hash = double_hash_256(block_header)
         block_hash = reverse_hex_bytes(block_hash)
-        print("Block Hash: ", block_hash)
+        # print("Block Hash: ", block_hash)
         if block_hash < DIFFICULTY_TARGET:
             print("Block mined successfully!")
             print("Block hash: ", block_hash)
