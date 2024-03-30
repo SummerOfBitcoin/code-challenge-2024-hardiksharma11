@@ -117,9 +117,9 @@ def mine_block(merkle_root):
     print("Mining block...")
     while True:
         block_header = serialize_block_header(block)
-        print("Header: ", block_header)
         block_hash = double_hash_256(block_header)
         block_hash = reverse_hex_bytes(block_hash)
+        print("Block Hash: ", block_hash)
         if block_hash < DIFFICULTY_TARGET:
             print("Block mined successfully!")
             print("Block hash: ", block_hash)
@@ -195,7 +195,7 @@ def main():
 
         # Write transaction IDs (txids) of the transactions mined in the block
         # Start with the coinbase transaction
-        output_file.write(coinbase_transaction_id)
+        output_file.write(reverse_hex_bytes(coinbase_transaction_id))
         output_file.write("\n")
 
         # Write txids of other transactions, if any
