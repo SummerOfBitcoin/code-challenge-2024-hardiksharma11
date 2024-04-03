@@ -34,8 +34,6 @@ def main():
 
     raw_coinbase_transaction = create_coinbase_transaction()
     coinbase_transaction_id = double_hash_256(raw_coinbase_transaction)
-    # coinbase_transaction_id = reverse_hex_bytes(coinbase_transaction_id)
-    # Add coinbase transaction to valid transactions
     transactions.insert(0, coinbase_transaction_id)
 
     # Calculate merkle root
