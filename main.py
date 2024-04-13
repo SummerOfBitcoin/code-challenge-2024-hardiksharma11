@@ -6,37 +6,38 @@ from transaction_validation import validate_transaction
 from generate_output import generate_output
 from read_transactions import read_transactions
 from serialize_transaction import serialize_transactions
+from transaction_validation import validate_transaction
 
-import json
-
-
-# Sample public key and signature for testing
-SAMPLE_PUBLIC_KEY = "04b5f2b6f01b02635bf0287685a03b089f8f82e583e49f0a4714f1ef29f336ef3fcedfacd9866fcb6b20389fc48623b41c8fb14a76b2c2c10cb58b300c72c4f28"  # Example public key
-SAMPLE_SIGNATURE = "3045022100e1d42fb417a3b991db2a33e72044c4f2d171dc0144075c2d08931c8b1b230c7022068f7c2c7c38cb1c4ac01e8f92a855059dfb28ef3d3e01a88342281e0708580b"  # Example signature
 
 
 # Main function
 def main():
-    print("Reading transactions from mempool...")
+
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
+    transactions = validate_transaction(transactions)
+    transactions = transactions[0:2999]
 
-    # Create coinbase transaction
-    # print("Creating coinbase transaction...")
+    fees = 0
+    for transaction in transactions:
+        fees += transaction["fees"]
+    
+    coinbase = create_coinbase_transaction(fees)
+    transactions.insert(0, coinbase)
 
-    # raw_coinbase_transaction = create_coinbase_transaction()
+   
     # coinbase_transaction_id = double_hash_256(raw_coinbase_transaction)
     # transactions.insert(0, coinbase_transaction_id)
 
     # # Calculate merkle root
     # print("Calculating merkle root...")
     # merkle_root = coinbase_transaction_id
-    # # merkle_root = calculate_merkle_root(valid_transactions)
+    merkle_root = calculate_merkle_root(transactions)
 
     # # Mine the block
-    # mined_block = mine_block(merkle_root)
+    mined_block = mine_block(merkle_root)
 
-    # generate_output(mined_block,raw_coinbase_transaction,coinbase_transaction_id)
+    generate_output(mined_block,coinbase["raw"],transactions)
     
 
 if __name__ == "__main__":

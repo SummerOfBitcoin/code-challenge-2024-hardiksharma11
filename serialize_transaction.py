@@ -1,7 +1,6 @@
 from hashing import double_hash_256, reverse_hex_bytes, sha_256, compact_size
 
 def serialize_transactions(transactions):
-    ct=0
     for i in range(len(transactions)):
         serialized_transaction = serialize_transaction(transactions[i])
         txid=""
@@ -23,6 +22,8 @@ def serialize_transaction(transaction):
     serialized_transaction = ""
     
     version = reverse_hex_bytes(hex(transaction["version"]).lstrip("0x").zfill(8))
+
+    marker_flag = "0001"
 
     input_count = compact_size(int(len(transaction["vin"])))
 

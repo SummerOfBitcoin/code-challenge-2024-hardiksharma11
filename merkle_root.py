@@ -1,10 +1,17 @@
-import hashlib
+from hashing import double_hash_256
 
 def calculate_merkle_root(transactions):
-    # todo
-    # Implement your merkle root calculation logic here
-    result = hashlib.sha256(transactions[0].encode()).hexdigest()
-    result = hashlib.sha256(result.encode()).hexdigest()
-    # result = reverse_hex_bytes(result)
-    print("Merkle root: ", result)
-    return result
+    storeHash = []
+    for i in range(len(transactions)):
+        storeHash.append(transactions[i]["txid"])
+
+    while len(storeHash) > 1:
+        if len(storeHash) % 2 != 0:
+            storeHash.append(storeHash[-1])
+        newStoreHash = []
+        for i in range(0, len(storeHash), 2):
+            newStoreHash.append(double_hash_256(storeHash[i] + storeHash[i+1]))
+        storeHash = newStoreHash
+
+
+    return storeHash[0]

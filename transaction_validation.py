@@ -23,8 +23,25 @@ def verify_signature(transaction):
     return True
 
 
+def check_input_greater_tha_output(transactions):
+    new_transactions = []
+    for transaction in transactions:
+        input_sum = 0
+        output_sum = 0
+        for vin in transaction["vin"]:
+            input_sum += vin["prevout"]["value"]
+        for vout in transaction["vout"]:
+            output_sum += vout["value"]
+        if input_sum > output_sum:
+            transaction["fees"] = input_sum - output_sum
+            new_transactions.append(transaction)
+
+
+    return new_transactions
+
 # Function to validate transactions
-def validate_transaction(transaction):
+def validate_transaction(transactions):
     # todo
     # Implement your transaction validation logic here
-    return verify_signature(transaction)
+    transactions = check_input_greater_tha_output(transactions)
+    return transactions
