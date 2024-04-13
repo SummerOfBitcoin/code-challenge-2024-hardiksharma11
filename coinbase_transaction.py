@@ -1,4 +1,4 @@
-from hashing import reverse_hex_bytes, double_hash_256
+from hashing import reverse_hex_bytes, double_hash_256, compact_size
 
 
 def amount(fees):
@@ -6,7 +6,7 @@ def amount(fees):
     return reverse_hex_bytes(hex(amt).lstrip("0x").zfill(16))
 
 
-def create_coinbase_transaction(fees):
+def create_coinbase_transaction(fees, wtxid_commitment):
     coinbase_transaction = {
         "version": "01000000",
         "marker": "00",
@@ -30,8 +30,8 @@ def create_coinbase_transaction(fees):
             },
             {
                 "amount": "0000000000000000",
-                "scriptpubkeysize": "26",
-                "scriptpubkey": "6a24aa21a9edfaa194df59043645ba0f58aad74bfd5693fa497093174d12a4bb3b0574a878db",
+                "scriptpubkeysize": compact_size(int(len(wtxid_commitment) / 2)),
+                "scriptpubkey": wtxid_commitment,
             },
         ],
         "witness": [
@@ -46,10 +46,19 @@ def create_coinbase_transaction(fees):
         "locktime": "00000000",
     }
 
+    # raw_coinbase_transaction = (
+    #     "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0804233fa04e028b12ffffffff01"
+    #     + amount(fees)
+    #     + "4341047eda6bd04fb27cab6e7c28c99b94977f073e912f25d1ff7165d9c95cd9bbe6da7e7ad7f2acb09e0ced91705f7616af53bee51a238b7dc527f2be0aa60469d140ac00000000"
+    # )
+
     raw_coinbase_transaction = (
-        "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0804233fa04e028b12ffffffff01"
+        "010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff2503233708184d696e656420627920416e74506f6f6c373946205b8160a4256c0000946e0100ffffffff02 "
         + amount(fees)
-        + "4341047eda6bd04fb27cab6e7c28c99b94977f073e912f25d1ff7165d9c95cd9bbe6da7e7ad7f2acb09e0ced91705f7616af53bee51a238b7dc527f2be0aa60469d140ac00000000"
+        + "1976a914edf10a7fac6b32e24daa5305c723f3de58db1bc888ac0000000000000000"
+        + compact_size(int(len(wtxid_commitment) / 2))
+        + wtxid_commitment
+        + "0120000000000000000000000000000000000000000000000000000000000000000000000000"
     )
 
     txid = double_hash_256(raw_coinbase_transaction)

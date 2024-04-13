@@ -1,9 +1,9 @@
 from hashing import double_hash_256,reverse_hex_bytes
 
-def calculate_merkle_root(transactions):
+def calculate_merkle_root(transactions,type):
     storeHash = []
     for i in range(len(transactions)):
-        storeHash.append(reverse_hex_bytes(transactions[i]["txid"]))
+        storeHash.append(reverse_hex_bytes(transactions[i][type]))
 
     while len(storeHash) > 1:
         if len(storeHash) % 2 != 0:

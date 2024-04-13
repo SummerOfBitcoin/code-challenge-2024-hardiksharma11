@@ -22,7 +22,9 @@ def main():
     for transaction in transactions:
         fees += transaction["fees"]
     
-    coinbase = create_coinbase_transaction(fees)
+    wtxid_commitment = calculate_merkle_root(transactions,"wtxid")
+
+    coinbase = create_coinbase_transaction(fees,wtxid_commitment)
     transactions.insert(0, coinbase)
 
    
@@ -32,7 +34,7 @@ def main():
     # # Calculate merkle root
     # print("Calculating merkle root...")
     # merkle_root = coinbase_transaction_id
-    merkle_root = calculate_merkle_root(transactions)
+    merkle_root = calculate_merkle_root(transactions,"txid")
 
     # # Mine the block
     mined_block = mine_block(reverse_hex_bytes(merkle_root))

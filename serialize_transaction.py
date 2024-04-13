@@ -2,24 +2,32 @@ from hashing import double_hash_256, reverse_hex_bytes, sha_256, compact_size
 
 def serialize_transactions(transactions):
     for i in range(len(transactions)):
-        serialized_transaction = serialize_transaction(transactions[i])
+        serialized_transaction = serialize_transaction(transactions[i])[1]
+        serialized_transaction_w = serialize_transaction(transactions[i])[0]
         txid=""
+        wtxid=""
         
         txid = double_hash_256(serialized_transaction)
-        
+        wtxid = double_hash_256(serialized_transaction_w)
+
         natural_txid = reverse_hex_bytes(txid)
+        natural_wtxid = reverse_hex_bytes(wtxid)
+
         txid_hash = sha_256(natural_txid)
         if(txid_hash != transactions[i]["txid_hash"]):
             print("Transaction ID: ", transactions[i]["vin"][0]["txid"])
             print("Serialized Transaction: ", serialized_transaction)
             
         transactions[i]["txid"] = natural_txid
+        transactions[i]["wtxid"] = natural_wtxid
         transactions[i]["raw_transaction"] = serialized_transaction
     
     return transactions
 
 def serialize_transaction(transaction):
     serialized_transaction = ""
+    serialize_transaction_w = ""
+
     
     version = reverse_hex_bytes(hex(transaction["version"]).lstrip("0x").zfill(8))
 
@@ -33,12 +41,37 @@ def serialize_transaction(transaction):
 
     vout = serialize_vout(transaction["vout"])
 
+    witness = serialize_witness(transaction["vin"])
+
     locktime = reverse_hex_bytes(hex(transaction["locktime"]).lstrip("0x").zfill(8))
 
     serialized_transaction += version + input_count + vin + output_count + vout + locktime
+    serialize_transaction_w += version + marker_flag + input_count + vin + output_count + vout + witness + locktime
 
-    return serialized_transaction
+    if(len(witness)): 
+        return [serialize_transaction_w, serialized_transaction]    
+    
+    return [serialized_transaction, serialized_transaction]
 
+
+def serialize_witness(vin):
+    serialized_witness = ""
+    
+    for i in range(len(vin)):
+        if(len(vin[i]["scriptsig"]) != 0): continue
+        witness = vin[i]["witness"]
+
+        stack_items = compact_size(int(len(witness)))
+
+        serialized_witness += stack_items
+
+        for j in range(len(witness)):
+            size = compact_size(int(len(witness[j])/2))
+            item = witness[j]
+
+            serialized_witness += size + item
+
+    return serialized_witness
 
 def serialize_vin(vin):
     serialized_vin = ""
