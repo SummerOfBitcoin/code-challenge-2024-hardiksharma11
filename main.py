@@ -24,7 +24,7 @@ def main():
     
     wtxid_commitment = calculate_merkle_root(transactions,"wtxid")
 
-    coinbase = create_coinbase_transaction(fees,wtxid_commitment)
+    coinbase = create_coinbase_transaction(fees,reverse_hex_bytes(wtxid_commitment))
     transactions.insert(0, coinbase)
 
    
