@@ -17,7 +17,7 @@ def main():
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
-    transactions = transactions[0:2]
+    transactions = transactions[0:2000]
 
     fees = 0
     for transaction in transactions:
