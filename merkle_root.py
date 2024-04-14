@@ -2,6 +2,8 @@ from hashing import double_hash_256,reverse_hex_bytes
 
 def calculate_merkle_root(transactions,type):
     storeHash = []
+    if type == "wtxid":
+        storeHash.append("0000000000000000000000000000000000000000000000000000000000000000")
     for i in range(len(transactions)):
         storeHash.append(reverse_hex_bytes(transactions[i][type]))
 

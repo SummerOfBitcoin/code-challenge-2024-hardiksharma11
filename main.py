@@ -7,6 +7,7 @@ from generate_output import generate_output
 from read_transactions import read_transactions
 from serialize_transaction import serialize_transactions
 from transaction_validation import validate_transaction
+import json
 
 
 
@@ -23,8 +24,8 @@ def main():
         fees += transaction["fees"]
     
     wtxid_commitment = calculate_merkle_root(transactions,"wtxid")
-
-    coinbase = create_coinbase_transaction(fees,reverse_hex_bytes(wtxid_commitment))
+    wtxid_commitment = double_hash_256(wtxid_commitment + "0000000000000000000000000000000000000000000000000000000000000000")
+    coinbase = create_coinbase_transaction(fees,wtxid_commitment)
     transactions.insert(0, coinbase)
 
    

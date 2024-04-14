@@ -20,3 +20,7 @@ def generate_output(mined_block, raw_coinbase_transaction, transactions):
         for transaction in transactions:
             output_file.write(transaction["txid"])
             output_file.write("\n")
+
+        # for transaction in transactions:
+        #     output_file.write(transaction["wtxid"])
+        #     output_file.write("\n")
