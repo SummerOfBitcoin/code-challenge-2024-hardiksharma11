@@ -52,7 +52,7 @@ def create_coinbase_transaction(fees, wtxid_commitment):
     #     + "4341047eda6bd04fb27cab6e7c28c99b94977f073e912f25d1ff7165d9c95cd9bbe6da7e7ad7f2acb09e0ced91705f7616af53bee51a238b7dc527f2be0aa60469d140ac00000000"
     # )
 
-    raw_coinbase_transaction = (
+    raw_coinbase_transaction_w = (
         "010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff2503233708184d696e656420627920416e74506f6f6c373946205b8160a4256c0000946e0100ffffffff02"
         + amount(fees)
         + "1976a914edf10a7fac6b32e24daa5305c723f3de58db1bc888ac0000000000000000"
@@ -61,10 +61,19 @@ def create_coinbase_transaction(fees, wtxid_commitment):
         + "0120000000000000000000000000000000000000000000000000000000000000000000000000"
     )
 
+    raw_coinbase_transaction = (
+        "01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff2503233708184d696e656420627920416e74506f6f6c373946205b8160a4256c0000946e0100ffffffff02"
+        + amount(fees)
+        + "1976a914edf10a7fac6b32e24daa5305c723f3de58db1bc888ac0000000000000000"
+        + compact_size(int(len(wtxid_commitment) / 2))
+        + wtxid_commitment
+        +"00000000"
+    )
+
     txid = double_hash_256(raw_coinbase_transaction)
     natural_txid = reverse_hex_bytes(txid)
     coinbase_transaction["txid"] = natural_txid
-    coinbase_transaction["raw"] = raw_coinbase_transaction
+    coinbase_transaction["raw"] = raw_coinbase_transaction_w
     coinbase_transaction["wtxid"] = (
         "0000000000000000000000000000000000000000000000000000000000000000"
     )
