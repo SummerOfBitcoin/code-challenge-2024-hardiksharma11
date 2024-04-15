@@ -1,5 +1,4 @@
 from block_mining import serialize_block_header
-from hashing import reverse_hex_bytes
 
 def generate_output(mined_block, raw_coinbase_transaction, transactions):
 
@@ -19,7 +18,7 @@ def generate_output(mined_block, raw_coinbase_transaction, transactions):
 
         # Write txids of other transactions, if any
         for transaction in transactions:
-            output_file.write(reverse_hex_bytes(transaction["txid"]))
+            output_file.write(transaction["txid"])
             output_file.write("\n")
 
         # output_file.write("\n")
