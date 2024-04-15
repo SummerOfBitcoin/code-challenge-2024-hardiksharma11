@@ -19,7 +19,7 @@ def main():
     transactions = validate_transaction(transactions)
     transactions = transactions[0:5]
 
-    print(json.dumps(transactions, indent=4))
+    # print(json.dumps(transactions, indent=4))
 
     fees = 0
     for transaction in transactions:
@@ -43,7 +43,7 @@ def main():
     merkle_root = calculate_merkle_root(transactions,"txid")
 
     # # Mine the block
-    mined_block = mine_block(merkle_root)
+    mined_block = mine_block(reverse_hex_bytes(merkle_root))
 
     generate_output(mined_block,coinbase["raw"],transactions)
     
