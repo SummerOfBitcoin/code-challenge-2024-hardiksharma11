@@ -17,9 +17,9 @@ def main():
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
-    transactions = transactions[3:5]
+    transactions = transactions[0:5]
 
-    # print(json.dumps(transactions[3], indent=4))
+    print(json.dumps(transactions, indent=4))
 
     fees = 0
     for transaction in transactions:
@@ -28,6 +28,8 @@ def main():
     wtxid_commitment = calculate_merkle_root(transactions,"wtxid")
     wtxid_commitment = double_hash_256(wtxid_commitment + "0000000000000000000000000000000000000000000000000000000000000000")
     wtxid_commitment = "6a24aa21a9ed" + wtxid_commitment
+    print("wtxid_commitment: ", wtxid_commitment)
+    
     coinbase = create_coinbase_transaction(fees,wtxid_commitment)
     transactions.insert(0, coinbase)
 
@@ -41,7 +43,7 @@ def main():
     merkle_root = calculate_merkle_root(transactions,"txid")
 
     # # Mine the block
-    mined_block = mine_block(reverse_hex_bytes(merkle_root))
+    mined_block = mine_block(merkle_root)
 
     generate_output(mined_block,coinbase["raw"],transactions)
     
