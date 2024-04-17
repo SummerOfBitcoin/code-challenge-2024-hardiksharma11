@@ -19,9 +19,9 @@ def main():
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
     transactions = sorted(transactions, key=get_fee)
-    transactions = transactions[0:1]
+    transactions = transactions[0:5]
 
-    print(json.dumps(transactions, indent=4))
+    # print(json.dumps(transactions, indent=4))
 
     fees = 0
     for transaction in transactions:
