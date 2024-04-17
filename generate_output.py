@@ -1,4 +1,5 @@
 from block_mining import serialize_block_header
+from hashing import reverse_hex_bytes
 
 def generate_output(mined_block, raw_coinbase_transaction, transactions):
 
