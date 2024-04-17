@@ -19,7 +19,7 @@ def serialize_transactions(transactions):
             print("Serialized Transaction: ", serialized_transaction)
             
         transactions[i]["txid"] = natural_txid
-        transactions[i]["wtxid"] = wtxid
+        transactions[i]["wtxid"] = natural_wtxid
         transactions[i]["raw_transaction"] = serialized_transaction
         transactions[i]["raw_transaction_w"] = serialized_transaction_w
     
