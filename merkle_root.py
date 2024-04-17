@@ -5,7 +5,7 @@ def calculate_merkle_root(transactions,type):
     if type == "wtxid":
         storeHash.append("0000000000000000000000000000000000000000000000000000000000000000")
     for i in range(len(transactions)):
-        storeHash.append(transactions[i][type])
+        storeHash.append(reverse_hex_bytes(transactions[i][type]))
 
     while len(storeHash) > 1:
         if len(storeHash) % 2 != 0:
