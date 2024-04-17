@@ -9,7 +9,8 @@ from serialize_transaction import serialize_transactions
 from transaction_validation import validate_transaction
 import json
 
-
+def get_fee(transaction):
+    return transaction['fees']
 
 # Main function
 def main():
@@ -17,7 +18,8 @@ def main():
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
-    transactions = transactions[7:8]
+    transactions = sorted(transactions, key=get_fee)
+    transactions = transactions[0:1]
 
     print(json.dumps(transactions, indent=4))
 
