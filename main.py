@@ -17,7 +17,7 @@ def main():
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
-    transactions = transactions[0:3]
+    transactions = transactions[0:5]
 
     print(json.dumps(transactions, indent=4))
 
