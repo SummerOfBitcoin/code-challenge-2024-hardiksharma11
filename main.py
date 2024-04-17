@@ -18,7 +18,7 @@ def main():
     transactions = read_transactions()
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
-    transactions = sorted(transactions, key=get_fee)
+    # transactions = sorted(transactions, key=get_fee)
     transactions = transactions[0:3]
 
     # print(json.dumps(transactions, indent=4))
