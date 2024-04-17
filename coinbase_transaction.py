@@ -2,7 +2,7 @@ from hashing import reverse_hex_bytes, double_hash_256, compact_size
 
 
 def amount(fees):
-    amt = fees + 1250000000
+    amt = fees + 625000000
     return reverse_hex_bytes(hex(amt).lstrip("0x").zfill(16))
 
 
