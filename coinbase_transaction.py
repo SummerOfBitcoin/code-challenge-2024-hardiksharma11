@@ -72,7 +72,7 @@ def create_coinbase_transaction(fees, wtxid_commitment):
 
     txid = double_hash_256(raw_coinbase_transaction)
     natural_txid = reverse_hex_bytes(txid)
-    coinbase_transaction["txid"] = txid
+    coinbase_transaction["txid"] = natural_txid
     coinbase_transaction["raw"] = raw_coinbase_transaction_w
     coinbase_transaction["wtxid"] = (
         "0000000000000000000000000000000000000000000000000000000000000000"
