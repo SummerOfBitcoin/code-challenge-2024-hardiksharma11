@@ -19,8 +19,9 @@ def main():
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
     # transactions = sorted(transactions, key=get_fee)
-    # transactions = transactions[0:5]
+    transactions = transactions[0:10]
 
+    print(len(transactions))
 
     fees = 0
     for transaction in transactions:
