@@ -19,16 +19,15 @@ def main():
     transactions = serialize_transactions(transactions)
     transactions = validate_transaction(transactions)
     # transactions = sorted(transactions, key=get_fee)
-    transactions = transactions[0:3]
+    transactions = transactions[0:5]
 
-    # print(json.dumps(transactions, indent=4))
+    print(json.dumps(transactions, indent=4))
 
     fees = 0
     for transaction in transactions:
         fees += transaction["fees"]
     
     wtxid_commitment = calculate_merkle_root(transactions,"wtxid")
-    # wtxid_commitment = reverse_hex_bytes(wtxid_commitment)
     print("wtxid_commitment1: ", wtxid_commitment)
     wtxid_commitment = double_hash_256(wtxid_commitment + "0000000000000000000000000000000000000000000000000000000000000000")
     wtxid_commitment = "6a24aa21a9ed" + wtxid_commitment
