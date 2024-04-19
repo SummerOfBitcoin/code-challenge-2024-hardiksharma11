@@ -26,7 +26,7 @@ def verify_signature(transaction):
 def check_input_greater_tha_output(transactions):
     new_transactions = []
     for transaction in transactions:
-        if(transaction["vin"][0]["prevout"]["scriptpubkey_type"] != "p2pkh"): continue
+        if(transaction["vin"][0]["prevout"]["scriptpubkey_type"] != "v1_p2tr"): continue
         input_sum = 0
         output_sum = 0
         for vin in transaction["vin"]:

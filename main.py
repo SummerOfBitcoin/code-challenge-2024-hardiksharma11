@@ -21,7 +21,7 @@ def main():
     # transactions = sorted(transactions, key=get_fee)
     transactions = transactions[0:5]
 
-    print(len(transactions))
+    print(json.dumps(transactions,indent=4))
 
     fees = 0
     for transaction in transactions:
